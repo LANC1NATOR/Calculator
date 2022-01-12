@@ -78,16 +78,16 @@ class CaloriesCalculator(Calculator):
         else:
             return 'Хватит есть!'
 
+if __name__ == '__main__':
+    cash_calculator = CashCalculator(1000)
+    cash_calculator.add_record(Record(amount=145, comment="кофе"))
+    cash_calculator.add_record(Record(amount=356, comment="Серёге за обед"))
+    cash_calculator.add_record(
+        Record(amount=3000, comment="бар в Танин др", date="09.01.2022"))
+    print(cash_calculator.get_today_cash_remained('rub'))
 
-cash_calculator = CashCalculator(1000)
-cash_calculator.add_record(Record(amount=145, comment="кофе"))
-cash_calculator.add_record(Record(amount=356, comment="Серёге за обед"))
-cash_calculator.add_record(
-    Record(amount=3000, comment="бар в Танин др", date="09.01.2022"))
-print(cash_calculator.get_today_cash_remained('rub'))
-
-calorie_calculator = CaloriesCalculator(5000)
-calorie_calculator.add_record(Record(amount=455))
-calorie_calculator.add_record(Record(amount=655))
-calorie_calculator.add_record(Record(amount=1240))
-print(calorie_calculator.get_calories_remained())
+    calorie_calculator = CaloriesCalculator(5000)
+    calorie_calculator.add_record(Record(amount=455))
+    calorie_calculator.add_record(Record(amount=655))
+    calorie_calculator.add_record(Record(amount=1240))
+    print(calorie_calculator.get_calories_remained())
