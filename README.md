@@ -1,2 +1,2 @@
 # Calculator
-Program for calculating expenditures and calories
+Program for calculating expenditures and calories. It's my studying project;)
