@@ -19,10 +19,8 @@ class Calculator:
         self.records = []
 
     def add_record(self, record):
-        if record.date > dt.datetime.now().date():
-            print('Мы не делаем записи наперед')
-        else:
-            self.records.append(record)
+        self.records.append(record)
+
 
     def get_today_stats(self):
         date_today = dt.date.today()
@@ -39,33 +37,33 @@ class Calculator:
 class CashCalculator(Calculator):
     USD_RATE = 74.29
     EURO_RATE = 84.07
+    RUB_RATE = 1.0
 
-    def get_today_cash_remained(self, currency='rub'):
+    def get_today_cash_remained(self, currency):
+        currencies = {
+            'rub': (self.RUB_RATE, 'руб'),
+            'usd': (self.USD_RATE, 'USD'),
+            'eur': (self.EURO_RATE, 'Euro')
+        }
         rest = self.limit - self.get_today_stats()
+        rate, currency_name = currencies[currency]
+        rest_in_currency = abs(round(rest / rate, 2))
         if rest > 0:
-            if currency == 'rub':
-                return f'На сегодня осталось {rest} руб'
-            elif currency == 'usd':
+            if currency in currencies:
                 return f'На сегодня осталось ' \
-                       f'{round(rest / CashCalculator.USD_RATE, 2)} USD'
-            elif currency == 'eur':
-                return f'На сегодня осталось ' \
-                       f'{round(rest / CashCalculator.EURO_RATE, 2)} Euro'
+                       f'{rest_in_currency} {currency_name}'
             else:
                 return 'Валюта не поддерживается'
         elif rest == 0:
             return 'Денег нет, держись'
         else:
-            if currency == 'rub':
-                return f'Денег нет, держись: твой долг - {rest} руб'
-            elif currency == 'usd':
+            if currency in currencies:
                 return f'Денег нет, держись: твой долг - ' \
-                       f'{round(rest / CashCalculator.USD_RATE, 2)} USD'
-            elif currency == 'eur':
-                return f'Денег нет, держись: твой долг - ' \
-                       f'{round(rest / CashCalculator.EURO_RATE, 2)} Euro'
+                       f'{rest_in_currency} {currency_name}'
             else:
                 return 'Валюта не поддерживается'
+
+
 
 
 class CaloriesCalculator(Calculator):
@@ -78,16 +76,18 @@ class CaloriesCalculator(Calculator):
         else:
             return 'Хватит есть!'
 
+
 if __name__ == '__main__':
     cash_calculator = CashCalculator(1000)
     cash_calculator.add_record(Record(amount=145, comment="кофе"))
     cash_calculator.add_record(Record(amount=356, comment="Серёге за обед"))
     cash_calculator.add_record(
-        Record(amount=3000, comment="бар в Танин др", date="09.01.2022"))
-    print(cash_calculator.get_today_cash_remained('rub'))
+        Record(amount=3000, comment="бар в Танин др", date="09.01.2023"))
+    print(cash_calculator.get_today_cash_remained(currency='usd'))
 
     calorie_calculator = CaloriesCalculator(5000)
     calorie_calculator.add_record(Record(amount=455))
     calorie_calculator.add_record(Record(amount=655))
     calorie_calculator.add_record(Record(amount=1240))
     print(calorie_calculator.get_calories_remained())
+
