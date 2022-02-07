@@ -3,7 +3,7 @@ import datetime as dt
 
 class Record:
 
-    def __init__(self, amount, comment='Без комментария', date=None):
+    def __init__(self, amount, comment='No comment', date=None):
         self.amount = amount
         self.comment = comment
         if date is None:
@@ -20,7 +20,6 @@ class Calculator:
 
     def add_record(self, record):
         self.records.append(record)
-
 
     def get_today_stats(self):
         date_today = dt.date.today()
@@ -50,20 +49,18 @@ class CashCalculator(Calculator):
         rest_in_currency = abs(round(rest / rate, 2))
         if rest > 0:
             if currency in currencies:
-                return f'На сегодня осталось ' \
+                return f'Left for today: ' \
                        f'{rest_in_currency} {currency_name}'
             else:
-                return 'Валюта не поддерживается'
+                return 'Currency not supported'
         elif rest == 0:
-            return 'Денег нет, держись'
+            return 'No money left'
         else:
             if currency in currencies:
-                return f'Денег нет, держись: твой долг - ' \
+                return f'There is no money left: your debt - ' \
                        f'{rest_in_currency} {currency_name}'
             else:
-                return 'Валюта не поддерживается'
-
-
+                return 'Currency not supported'
 
 
 class CaloriesCalculator(Calculator):
@@ -71,18 +68,19 @@ class CaloriesCalculator(Calculator):
     def get_calories_remained(self):
         rest = self.limit - self.get_today_stats()
         if rest > 0:
-            return f'Сегодня можно съесть что-нибудь ещё, ' \
-                   f'но с общей калорийностью не более {rest} кКал'
+            return f'You can eat some more today, ' \
+                   f'but with a total calorie content of no more than' \
+                   f' {rest} kcal'
         else:
-            return 'Хватит есть!'
+            return 'Stop eating!'
 
 
 if __name__ == '__main__':
     cash_calculator = CashCalculator(1000)
-    cash_calculator.add_record(Record(amount=145, comment="кофе"))
-    cash_calculator.add_record(Record(amount=356, comment="Серёге за обед"))
+    cash_calculator.add_record(Record(amount=145, comment="coffee"))
+    cash_calculator.add_record(Record(amount=356, comment="to Mary for lunch"))
     cash_calculator.add_record(
-        Record(amount=3000, comment="бар в Танин др", date="09.01.2023"))
+        Record(amount=3000, comment="drinks on a party", date="09.01.2023"))
     print(cash_calculator.get_today_cash_remained(currency='usd'))
 
     calorie_calculator = CaloriesCalculator(5000)
@@ -90,4 +88,3 @@ if __name__ == '__main__':
     calorie_calculator.add_record(Record(amount=655))
     calorie_calculator.add_record(Record(amount=1240))
     print(calorie_calculator.get_calories_remained())
-
